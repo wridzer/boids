@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BoidsManager : MonoBehaviour
@@ -14,28 +15,24 @@ public class BoidsManager : MonoBehaviour
     [SerializeField] private float rule1 = 10000f;
     [SerializeField] private float rule2 = 100f;
     [SerializeField] private float rule3 = 80f;
+    [SerializeField] private float ruleBorder = 80f;
 
-    private List<Boid> boidList = new List<Boid>();
+    [HideInInspector] public List<Boid> boidList = new List<Boid>();
 
     // Start is called before the first frame update
     void Start()
     {
         for (int i = 0; i < numberOfBoids; i++)
         {
-            Vector3 startPos = new Vector3(Random.Range(0, frame.x), Random.Range(0, frame.y), Random.Range(0, frame.z));
+            Vector3 startPos = new Vector3(Random.Range(0, frame.x), Random.Range(-1, frame.y -1), Random.Range(0, frame.z));
             Boid tempBoid = Instantiate(boidInstance, startPos, new Quaternion());
-            tempBoid.velocity = new Vector3(Random.Range(-maxSpeed, maxSpeed), Random.Range(-maxSpeed, maxSpeed), Random.Range(-maxSpeed, maxSpeed));
+            tempBoid.velocity = Vector3.zero;
             boidList.Add(tempBoid);
         }
     }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        MoveBoids();
-    }
-
-    void MoveBoids()
+    void Update()
     {
         Vector3 v1, v2, v3, vBorder;
         foreach (Boid b in boidList)
@@ -46,14 +43,17 @@ public class BoidsManager : MonoBehaviour
             vBorder = Border(b);
 
             b.velocity = b.velocity + v1 + v2 + v3 + vBorder;
-            //Debug.Log("Rule 1: " + v1 + "Rule 2: " + v2 + "Rule 3: "+ v3 * 100 + "Velocity: " + b.velocity);
+            LimitSpeed(b);
+            b.position = b.position + b.velocity;
+        }
+    }
 
-            float x = Mathf.Clamp(b.velocity.x, -maxSpeed, maxSpeed);
-            float y = Mathf.Clamp(b.velocity.y, -maxSpeed, maxSpeed);
-            float z = Mathf.Clamp(b.velocity.z, -maxSpeed, maxSpeed);
-            Vector3 clampedVelocity = new Vector3(x, y, z);
-            b.position = b.position + clampedVelocity;
+    void LimitSpeed(Boid b)
+    {
 
+        if (b.velocity.magnitude > maxSpeed)
+        {
+            b.velocity = (b.velocity / b.velocity.magnitude) * maxSpeed;
         }
     }
 
@@ -82,7 +82,7 @@ public class BoidsManager : MonoBehaviour
         {
             if (b != bJ)
             {
-                float dist = Vector3.Distance(b.position, bJ.position);
+                float dist = (b.position - bJ.position).magnitude;
                 if (dist < distance)
                 {
                     c = c - (b.position - bJ.position);
@@ -134,15 +134,21 @@ public class BoidsManager : MonoBehaviour
             v.y = -borderBounce;
         }
 
-        if (b.position.y < Zmin)
+        if (b.position.z < Zmin)
         {
             v.z = borderBounce;
         }
-        else if (b.position.y > frame.z)
+        else if (b.position.z > frame.z)
         {
             v.z = -borderBounce;
         }
 
-        return v;
+        return v / ruleBorder;
     }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawWireCube(Vector3.zero + (frame * 0.5f), frame);
+    //}
 }

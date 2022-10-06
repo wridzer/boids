@@ -18,7 +18,7 @@ public class Boid : MonoBehaviour
 
     private void Update()
     {
-        Vector3 lookDir = Vector3.RotateTowards(transform.forward, velocity, 10 * Time.deltaTime, 0f);
+        Vector3 lookDir = Vector3.RotateTowards(transform.forward, velocity.normalized, 5 * Time.deltaTime, 0f);
         transform.rotation = Quaternion.LookRotation(lookDir);
     }
 

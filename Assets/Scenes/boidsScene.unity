@@ -152,15 +152,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d00c346c93723246b3431704050276b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frame: {x: 50, y: 50, z: 50}
-  numberOfBoids: 100
+  frame: {x: 100, y: 100, z: 100}
+  numberOfBoids: 200
   boidInstance: {fileID: 8044273180026324281, guid: d6332f6d346bf49419441458dc999ab0, type: 3}
   maxSpeed: 0.25
-  borderBounce: 1
-  distance: 3
+  borderBounce: 10
+  distance: 5
   rule1: 5000
-  rule2: 100
+  rule2: 120
   rule3: 120
+  ruleBorder: 3
+  boidList: []
 --- !u!4 &435678027
 Transform:
   m_ObjectHideFlags: 0
@@ -171,6 +173,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -264,6 +267,7 @@ Transform:
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -279,6 +283,7 @@ GameObject:
   - component: {fileID: 1465368692}
   - component: {fileID: 1465368691}
   - component: {fileID: 1465368690}
+  - component: {fileID: 1465368693}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -345,9 +350,24 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1465368689}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50, y: 50, z: -100}
+  m_LocalPosition: {x: 50, y: 50, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1465368693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465368689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e960e3d2d180e3746967dae27f4a6f49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boidsManager: {fileID: 435678026}
+  offset: {x: 0, y: 0, z: -50}
